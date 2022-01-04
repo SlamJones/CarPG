@@ -1966,7 +1966,7 @@ def junkyard(player):
                         display_character(mechanic)
                         
                         
-def science_stop(player,stop,location_name):
+def science_stop(network,player,stop,location_name):
         print("You can conduct field research here with a skilled scientist")
         scientist_present=False
         sublist = []
@@ -2018,7 +2018,7 @@ def interact_with_stop(network,player,stop,location_name):
         junkyard(player)
         
     elif stop == "Plateau" or stop == "Volcano" or stop == "Field" or stop == "Forest" or stop == "Escarpment" or stop == "Fissure" or stop == "Cave":
-        science_stop(player,stop,location_name)
+        science_stop(network,player,stop,location_name)
                     
     elif stop == "Intersection":
         print("A side road starts here.  It does not lead to a town.")
