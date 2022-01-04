@@ -2099,8 +2099,9 @@ def interact_with_stop(network,player,stop,location_name):
                         if player["currency"] < part_boxed[0]["value"]:
                             print("You don't have enough money!")
                             return
-                        player["currency"] -= part_boxed[0]["value"]
-                        player["vehicle"],part_boxed[0] = replace_part(player["vehicle"],part_boxed[0])
+                        else:
+                            player["currency"] -= part_boxed[0]["value"]
+                            player["vehicle"],part_boxed[0] = replace_part(player["vehicle"],part_boxed[0])
             if choice == "":
                 break
         return
