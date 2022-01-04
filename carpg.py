@@ -2033,6 +2033,44 @@ def racetrack(player):
                         skill["xp"] -= 100
                         skill["level"] += 1
                     display_character(driver)
+                    
+                    
+                    
+def warehouse(network,player,location_name):
+        print(short_border)
+        print("You can accept or complete delivery contracts at places like this")
+        for item in player["vehicle"]["chassis"]["cabin"]["cargo"]:
+            if item["destination"] == location_name:
+                print("Ah, looks like you have a delivery for us.")
+                complete_delivery(network,player,location_name)
+                player["travel_log"].append("  Delivered {} from {}".format(item["name"],item["origin"]))
+        choice = input("Take on a new delivery? (y/n) ")
+        if choice != "y":
+            return
+        choice_list = []
+        items = random.randrange(3,6)
+        for i in range(1,items+1):
+            cargo = create_warehouse_crate(network,location_name)
+            choice_list.append([i,cargo])
+        for item in choice_list:
+            index=str(item[0])
+            cargo=item[1]
+            print("{}: {}, {}kg, {}km,\t${}".format(
+                index,cargo["name"],str(cargo["weight"]),str(cargo["distance"]),str(cargo["value"])))
+        cont = input("Which delivery do you want to take? (1-9) ")
+        for item in choice_list:
+            if cont==str(item[0]):
+                #index=str(item[0])
+                cargo=item[1]
+                player["vehicle"]["chassis"]["cabin"]["cargo"].append(cargo)
+                print("You've loaded the cargo into your vehicle.  Good luck!")
+                route = find_route(network,location_name,cargo["destination"])
+                print("By the way, try this route:")
+                print(route)
+                player["travel_log"].append("  {} to {}".format(cargo["name"],cargo["destination"]))
+                player["travel_log"].append("  "+str(route)+"\n")
+        print(short_border)
+    
     
     
     
@@ -2067,39 +2105,7 @@ def interact_with_stop(network,player,stop,location_name):
         racetrack(player)
         
     elif stop == "Warehouse":
-        print(short_border)
-        print("You can accept or complete delivery contracts at places like this")
-        for item in player["vehicle"]["chassis"]["cabin"]["cargo"]:
-            if item["destination"] == location_name:
-                print("Ah, looks like you have a delivery for us.")
-                complete_delivery(network,player,location_name)
-                player["travel_log"].append("  Delivered {} from {}".format(item["name"],item["origin"]))
-        choice = input("Take on a new delivery? (y/n) ")
-        if choice != "y":
-            return
-        choice_list = []
-        items = random.randrange(3,6)
-        for i in range(1,items+1):
-            cargo = create_warehouse_crate(network,location_name)
-            choice_list.append([i,cargo])
-        for item in choice_list:
-            index=str(item[0])
-            cargo=item[1]
-            print("{}: {}, {}kg, {}km,\t${}".format(
-                index,cargo["name"],str(cargo["weight"]),str(cargo["distance"]),str(cargo["value"])))
-        cont = input("Which delivery do you want to take? (1-9) ")
-        for item in choice_list:
-            if cont==str(item[0]):
-                #index=str(item[0])
-                cargo=item[1]
-                player["vehicle"]["chassis"]["cabin"]["cargo"].append(cargo)
-                print("You've loaded the cargo into your vehicle.  Good luck!")
-                route = find_route(network,location_name,cargo["destination"])
-                print("By the way, try this route:")
-                print(route)
-                player["travel_log"].append("  {} to {}".format(cargo["name"],cargo["destination"]))
-                player["travel_log"].append("  "+str(route)+"\n")
-        print(short_border)
+        warehouse(network,player,location_name)
         
     elif stop == "Auto Shop":
         print("You can purchase vehicle resources and new components here")
