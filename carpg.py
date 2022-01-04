@@ -1838,14 +1838,18 @@ def salvage_random_part():
     return(part)
 
 
+def gas_station(player):
+    print("You have ${}".format(round(player["currency"],2)))
+    fuel_price = round(random.uniform(1.2,2.4),2)
+    fill_fuel_tank(player,fuel_price)
+        
+
 ## MAIN LOOP FOR INTERACTING WITH STOPS OR AMENITIES ##
 ## OUTCOME DIFFERS BASED ON STOP NAME AND LOCATION ##
 ## TO BE SPLIT INTO DISCRETE FUNCTIONS BASED ON STOP TYPE ##
 def interact_with_stop(network,player,stop,location_name):
     if stop == "Gas Station":
-        print("You have ${}".format(round(player["currency"],2)))
-        fuel_price = round(random.uniform(1.2,2.4),2)
-        fill_fuel_tank(player,fuel_price)
+        gas_station(player)
         
     elif stop == "Farm":
         work_available=False
