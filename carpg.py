@@ -1915,24 +1915,10 @@ def repair_vehicle(player):
             return
         display_vehicle_durability(player["vehicle"])
         time.sleep(1)
-    
-    
         
         
-## MAIN LOOP FOR INTERACTING WITH STOPS OR AMENITIES ##
-## OUTCOME DIFFERS BASED ON STOP NAME AND LOCATION ##
-## TO BE SPLIT INTO DISCRETE FUNCTIONS BASED ON STOP TYPE ##
-def interact_with_stop(network,player,stop,location_name):
-    if stop == "Gas Station":
-        gas_station(player)
         
-    elif stop == "Farm":
-        farm(player)
-            
-    elif stop == "Garage" or stop == "Repair Shop":
-        repair_vehicle(player)
-        
-    elif stop == "Junkyard" or stop == "Salvage Yard":
+def junkyard(player):
         print("You can search for salvage parts here with a skilled mechanic")
         mechanic_present=False
         sublist = []
@@ -1978,8 +1964,9 @@ def interact_with_stop(network,player,stop,location_name):
                             skill["xp"] -= 100
                             skill["level"] += 1
                         display_character(mechanic)
-        
-    elif stop == "Plateau" or stop == "Volcano" or stop == "Field" or stop == "Forest" or stop == "Escarpment" or stop == "Fissure" or stop == "Cave":
+                        
+                        
+def science_stop(player,stop,location_name):
         print("You can conduct field research here with a skilled scientist")
         scientist_present=False
         sublist = []
@@ -2010,6 +1997,28 @@ def interact_with_stop(network,player,stop,location_name):
                             skill["xp"] -= 100
                             skill["level"] += 1
                         display_character(scientist)
+    
+    
+        
+        
+## MAIN LOOP FOR INTERACTING WITH STOPS OR AMENITIES ##
+## OUTCOME DIFFERS BASED ON STOP NAME AND LOCATION ##
+## TO BE SPLIT INTO DISCRETE FUNCTIONS BASED ON STOP TYPE ##
+def interact_with_stop(network,player,stop,location_name):
+    if stop == "Gas Station":
+        gas_station(player)
+        
+    elif stop == "Farm":
+        farm(player)
+            
+    elif stop == "Garage" or stop == "Repair Shop":
+        repair_vehicle(player)
+        
+    elif stop == "Junkyard" or stop == "Salvage Yard":
+        junkyard(player)
+        
+    elif stop == "Plateau" or stop == "Volcano" or stop == "Field" or stop == "Forest" or stop == "Escarpment" or stop == "Fissure" or stop == "Cave":
+        science_stop(player,stop,location_name)
                     
     elif stop == "Intersection":
         print("A side road starts here.  It does not lead to a town.")
