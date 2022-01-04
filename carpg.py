@@ -1859,20 +1859,9 @@ def farm(player):
                 print("Carry on, then")
         else:
             print("Sometimes day work is available at places like this")
-    
-        
-        
-## MAIN LOOP FOR INTERACTING WITH STOPS OR AMENITIES ##
-## OUTCOME DIFFERS BASED ON STOP NAME AND LOCATION ##
-## TO BE SPLIT INTO DISCRETE FUNCTIONS BASED ON STOP TYPE ##
-def interact_with_stop(network,player,stop,location_name):
-    if stop == "Gas Station":
-        gas_station(player)
-        
-    elif stop == "Farm":
-        farm(player)
             
-    elif stop == "Garage" or stop == "Repair Shop":
+            
+def repair_vehicle(player):
         print("You can get your car maintained or fixed here")
         vehicle = player["vehicle"]
         chas = vehicle["chassis"]
@@ -1926,6 +1915,22 @@ def interact_with_stop(network,player,stop,location_name):
             return
         display_vehicle_durability(player["vehicle"])
         time.sleep(1)
+    
+    
+        
+        
+## MAIN LOOP FOR INTERACTING WITH STOPS OR AMENITIES ##
+## OUTCOME DIFFERS BASED ON STOP NAME AND LOCATION ##
+## TO BE SPLIT INTO DISCRETE FUNCTIONS BASED ON STOP TYPE ##
+def interact_with_stop(network,player,stop,location_name):
+    if stop == "Gas Station":
+        gas_station(player)
+        
+    elif stop == "Farm":
+        farm(player)
+            
+    elif stop == "Garage" or stop == "Repair Shop":
+        repair_vehicle(player)
         
     elif stop == "Junkyard" or stop == "Salvage Yard":
         print("You can search for salvage parts here with a skilled mechanic")
