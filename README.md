@@ -10,7 +10,10 @@ management, and general game design.
 
 ----- ----- ----- ----- -----
 
-CarPG is a text-based adventure game based on Oregon Trail.
+CarPG is a text-based adventure game based on Oregon Trail.  To try it,
+enter the following commands:
+  import carpg
+  carpg.play()
 
 RPGF is a text-based RPG adventure game based on old-school
 Text-Based games and, consequently, inspired by Dungeons and Dragons.
