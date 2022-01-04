@@ -1844,14 +1844,7 @@ def gas_station(player):
     fill_fuel_tank(player,fuel_price)
         
 
-## MAIN LOOP FOR INTERACTING WITH STOPS OR AMENITIES ##
-## OUTCOME DIFFERS BASED ON STOP NAME AND LOCATION ##
-## TO BE SPLIT INTO DISCRETE FUNCTIONS BASED ON STOP TYPE ##
-def interact_with_stop(network,player,stop,location_name):
-    if stop == "Gas Station":
-        gas_station(player)
-        
-    elif stop == "Farm":
+def farm(player):
         work_available=False
         rng = random.randrange(0,2)
         pay = random.randrange(2,7)
@@ -1866,6 +1859,18 @@ def interact_with_stop(network,player,stop,location_name):
                 print("Carry on, then")
         else:
             print("Sometimes day work is available at places like this")
+    
+        
+        
+## MAIN LOOP FOR INTERACTING WITH STOPS OR AMENITIES ##
+## OUTCOME DIFFERS BASED ON STOP NAME AND LOCATION ##
+## TO BE SPLIT INTO DISCRETE FUNCTIONS BASED ON STOP TYPE ##
+def interact_with_stop(network,player,stop,location_name):
+    if stop == "Gas Station":
+        gas_station(player)
+        
+    elif stop == "Farm":
+        farm(player)
             
     elif stop == "Garage" or stop == "Repair Shop":
         print("You can get your car maintained or fixed here")
