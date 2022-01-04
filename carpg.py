@@ -2094,7 +2094,7 @@ def interact_with_stop(network,player,stop,location_name):
             for part_boxed in parts_list:
                 if choice == str(part_boxed[1]):
                     display_part(part_boxed[0])
-                    if not part_compatible_with(vehicle,part_boxed[0]):
+                    if not part_compatible_with(player["vehicle"],part_boxed[0]):
                         print("This part is not compatible with your vehicle!")
                         return
                     cont=input("Want to purchase this part and install it on your vehicle? (y/n) ")
