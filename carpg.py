@@ -2498,8 +2498,8 @@ def print_engine_stats():
         hpt = round(hp / (kg/1000),2)
         tpt = round(torque / (kg/1000),2)
         displacement = calculate_engine_displacement(engine)
-        liters = round(displacement/1000,2)
-        print("{}\t{}, {}l produces:\n{} horsepower,\t{} lb/ft torque,\tweighs {}kg\t{} hp/t\n".format(
+        liters = round(displacement/1000,1)
+        print("{}\t{}, {} l produces:\n{} horsepower,\t{} lb/ft torque,\tweighs {}kg\t{} hp/t\n".format(
             engine["brand"],engine["model"],str(liters),str(hp),str(torque),str(kg),str(hpt)))
 
 
