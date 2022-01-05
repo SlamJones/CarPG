@@ -204,6 +204,7 @@ parts = {
          "bore": 4,
          "stroke": 3,
          "max_rpm": 4500,
+         "compression": 1,
          "turbo": "",
          "durability": 100,
          "max_durability": 100,
@@ -222,6 +223,7 @@ parts = {
          "bore": 4,
          "stroke": 3,
          "max_rpm": 4500,
+         "compression": 1,
          "turbo": "",
          "durability": 100,
          "max_durability": 100,
@@ -240,6 +242,7 @@ parts = {
          "bore": 4,
          "stroke": 4.5,
          "max_rpm": 3000,
+         "compression": 1,
          "turbo": "",
          "durability": 100,
          "max_durability": 100,
@@ -258,6 +261,7 @@ parts = {
          "bore": 3,
          "stroke": 2.4,
          "max_rpm": 5000,
+         "compression": 1,
          "turbo": "",
          "durability": 100,
          "max_durability": 100,
@@ -276,6 +280,7 @@ parts = {
          "bore": 4.5,
          "stroke": 2.5,
          "max_rpm": 8500,
+         "compression": 1,
          "turbo": "",
          "durability": 100,
          "max_durability": 100,
@@ -294,6 +299,7 @@ parts = {
          "bore": 5,
          "stroke": 4.5,
          "max_rpm": 4500,
+         "compression": 1,
          "turbo": "",
          "durability": 100,
          "max_durability": 100,
@@ -312,6 +318,7 @@ parts = {
          "bore": 5,
          "stroke": 8.5,
          "max_rpm": 3500,
+         "compression": 1,
          "turbo": "",
          "durability": 200,
          "max_durability": 200,
@@ -2530,7 +2537,7 @@ def calculate_horsepower(car):
     eng = car["chassis"]["engine"]
     horsepower = car["chassis"]["engine"]["base_horsepower"]
     try:
-        horsepower = horsepower * eng["turbo"]["horsepower_factor"]
+        horsepower = horsepower * eng["turbo"]["horsepower_factor"] * eng["compression"]
     except:
         pass
     return(horsepower)
