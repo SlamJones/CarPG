@@ -2535,9 +2535,9 @@ def print_handling_stats():
 ## CALCULATE AND RETURN TOTAL HORSEPOWER OF VEHICLES ENGINE ##
 def calculate_horsepower(car):
     eng = car["chassis"]["engine"]
-    horsepower = car["chassis"]["engine"]["base_horsepower"]
+    horsepower = car["chassis"]["engine"]["base_horsepower"] * eng["compression"]
     try:
-        horsepower = horsepower * eng["turbo"]["horsepower_factor"] * eng["compression"]
+        horsepower = horsepower * eng["turbo"]["horsepower_factor"]
     except:
         pass
     return(horsepower)
