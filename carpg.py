@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
 
+## THIS IS THE EXPERIMENTAL BRANCH ##
+## OR, AT LEAST IT SHOULD BE!! ##
+
+
 ##
 ##### PRIORITIES:
 ##### PRACTICE PROGRAMMING SKILLS IN AN ENJOYABLE ENVIRONMENT (THE ONLY THING HERE THAT MATTERS)
@@ -1834,134 +1838,135 @@ def salvage_random_part():
     return(part)
 
 
-## MAIN LOOP FOR INTERACTING WITH STOPS OR AMENITIES ##
-## OUTCOME DIFFERS BASED ON STOP NAME AND LOCATION ##
-## TO BE SPLIT INTO DISCRETE FUNCTIONS BASED ON STOP TYPE ##
-def interact_with_stop(network,player,stop,location_name):
-    if stop == "Gas Station":
-        print("You have ${}".format(round(player["currency"],2)))
-        fuel_price = round(random.uniform(1.2,2.4),2)
-        fill_fuel_tank(player,fuel_price)
+def gas_station(player):
+    print("You have ${}".format(round(player["currency"],2)))
+    fuel_price = round(random.uniform(1.2,2.4),2)
+    fill_fuel_tank(player,fuel_price)
         
-    elif stop == "Farm":
-        work_available=False
-        rng = random.randrange(0,2)
-        pay = random.randrange(2,7)
-        if rng == 0:
-            work_available=True
-        if work_available:
-            choice = input("You can work a few hours in the field for ${}.  Deal?  (y/n) ".format(str(pay)))
-            if choice == "y":
-                print("You work a few hours and earn ${}".format(str(pay)))
-                player["currency"] += pay
-            else:
-                print("Carry on, then")
+
+def farm(player):
+    work_available=False
+    rng = random.randrange(0,2)
+    pay = random.randrange(2,7)
+    if rng == 0:
+        work_available=True
+    if work_available:
+        choice = input("You can work a few hours in the field for ${}.  Deal?  (y/n) ".format(str(pay)))
+        if choice == "y":
+            print("You work a few hours and earn ${}".format(str(pay)))
+            player["currency"] += pay
         else:
-            print("Sometimes day work is available at places like this")
+            print("Carry on, then")
+    else:
+        print("Sometimes day work is available at places like this")
             
-    elif stop == "Garage" or stop == "Repair Shop":
-        print("You can get your car maintained or fixed here")
-        vehicle = player["vehicle"]
-        chas = vehicle["chassis"]
-        repair_total = 0
-        damage = 0
-        cont = input("Have the mechanic take a look at your vehicle? (y) ")
-        if cont == "y":
-            display_vehicle_durability(vehicle)
-            time.sleep(1)
-        else:
-            return
-        partslist = ["engine","cabin","fuel_tank"]
-        print(short_border)
-        for pname in partslist:
-            damage = chas[pname]["max_durability"] - chas[pname]["durability"]
-            repair_total += damage
-            part = chas[pname]
-            print("{} {} has taken {} damage since last repaired".format(
-                part["brand"],part["model"],damage))
-        damage = vehicle["chassis"]["max_durability"] - vehicle["chassis"]["durability"]
-        print("{} {} has taken {} damage since last repaired".format(
-            vehicle["chassis"]["brand"],vehicle["chassis"]["model"],damage))
-        repair_total += damage
-        repair_total = round(repair_total/4,2)
-        print(short_border)
-        if damage == 0:
-            print("Your vehicle is in pretty good condition already!  No repairs needed.\n")
-            time.sleep(0.5)
-            return
-        if player["currency"] < repair_total:
-            print("You don't have enough money to repair the whole car!")
-            return
-        cont = input("Repair damaged parts for ${}? (y/n) ".format(repair_total))
-        if cont == "y":
-            player["currency"] -= repair_total
-            if vehicle["chassis"]["durability"] != vehicle["chassis"]["max_durability"]:
-                diff = int((vehicle["chassis"]["max_durability"] - vehicle["chassis"]["durability"])/20)
-                if diff < 1:
-                    diff = 1
-                vehicle["chassis"]["max_durability"] -= diff
-                vehicle["chassis"]["durability"] = vehicle["chassis"]["max_durability"]
-            part=""
-            for part in ["engine","cabin","fuel_tank"]:
-                if vehicle["chassis"][part]["durability"] != vehicle["chassis"][part]["max_durability"]:
-                    diff = int((vehicle["chassis"][part]["max_durability"] - vehicle["chassis"][part]["durability"])/30)
-                if diff < 1:
-                    diff = 1
-                vehicle["chassis"][part]["max_durability"] -= diff
-                vehicle["chassis"][part]["durability"] = vehicle["chassis"][part]["max_durability"]
-        else:
-            return
-        display_vehicle_durability(player["vehicle"])
+            
+def repair_vehicle(player):
+    print("You can get your car maintained or fixed here")
+    vehicle = player["vehicle"]
+    chas = vehicle["chassis"]
+    repair_total = 0
+    damage = 0
+    cont = input("Have the mechanic take a look at your vehicle? (y) ")
+    if cont == "y":
+        display_vehicle_durability(vehicle)
         time.sleep(1)
+    else:
+        return
+    partslist = ["engine","cabin","fuel_tank"]
+    print(short_border)
+    for pname in partslist:
+        damage = chas[pname]["max_durability"] - chas[pname]["durability"]
+        repair_total += damage
+        part = chas[pname]
+        print("{} {} has taken {} damage since last repaired".format(
+                part["brand"],part["model"],damage))
+    damage = vehicle["chassis"]["max_durability"] - vehicle["chassis"]["durability"]
+    print("{} {} has taken {} damage since last repaired".format(
+            vehicle["chassis"]["brand"],vehicle["chassis"]["model"],damage))
+    repair_total += damage
+    repair_total = round(repair_total/4,2)
+    print(short_border)
+    if damage == 0:
+        print("Your vehicle is in pretty good condition already!  No repairs needed.\n")
+        time.sleep(0.5)
+        return
+    if player["currency"] < repair_total:
+        print("You don't have enough money to repair the whole car!")
+        return
+    cont = input("Repair damaged parts for ${}? (y/n) ".format(repair_total))
+    if cont == "y":
+        player["currency"] -= repair_total
+        if vehicle["chassis"]["durability"] != vehicle["chassis"]["max_durability"]:
+            diff = int((vehicle["chassis"]["max_durability"] - vehicle["chassis"]["durability"])/20)
+            if diff < 1:
+                diff = 1
+            vehicle["chassis"]["max_durability"] -= diff
+            vehicle["chassis"]["durability"] = vehicle["chassis"]["max_durability"]
+        part=""
+        for part in ["engine","cabin","fuel_tank"]:
+            if vehicle["chassis"][part]["durability"] != vehicle["chassis"][part]["max_durability"]:
+                diff = int((vehicle["chassis"][part]["max_durability"] - vehicle["chassis"][part]["durability"])/30)
+            if diff < 1:
+                diff = 1
+            vehicle["chassis"][part]["max_durability"] -= diff
+            vehicle["chassis"][part]["durability"] = vehicle["chassis"][part]["max_durability"]
+    else:
+        return
+    display_vehicle_durability(player["vehicle"])
+    time.sleep(1)
         
-    elif stop == "Junkyard" or stop == "Salvage Yard":
-        print("You can search for salvage parts here with a skilled mechanic")
-        mechanic_present=False
-        sublist = []
-        for character in player["party"]:
-            if character["job"] == "Mechanic":
-                mechanic_present=True
-                sublist.append(character)
-        if mechanic_present:
-            #scientist = random.choice(sublist)
-            choice=input("Search for salvagable parts? (y/n) ")
-            if choice=="y":
-                for mechanic in sublist:
-                    rng = random.randrange(0,5)-(mechanic["skills"][0]["level"]/2)
-                    if rng<=0:
-                        part = salvage_random_part()
-                        salvage_factor = 10-(mechanic["skills"][0]["level"])
-                        if salvage_factor < 1:
-                            salvage_factor = 1
-                        value = round(part["value"]/salvage_factor,2)
-                        print("{} found a {} {}, worth ${}!".format(
+        
+        
+def junkyard(player):
+    print("You can search for salvage parts here with a skilled mechanic")
+    mechanic_present=False
+    sublist = []
+    for character in player["party"]:
+        if character["job"] == "Mechanic":
+            mechanic_present=True
+            sublist.append(character)
+    if mechanic_present:
+        #scientist = random.choice(sublist)
+        choice=input("Search for salvagable parts? (y/n) ")
+        if choice=="y":
+            for mechanic in sublist:
+                rng = random.randrange(0,5)-(mechanic["skills"][0]["level"]/2)
+                if rng<=0:
+                    part = salvage_random_part()
+                    salvage_factor = 10-(mechanic["skills"][0]["level"])
+                    if salvage_factor < 1:
+                        salvage_factor = 1
+                    value = round(part["value"]/salvage_factor,2)
+                    print("{} found a {} {}, worth ${}!".format(
                             mechanic["name"],part["brand"],part["model"],value))
-                        cont=input("(S)ell it or try to (i)nstall it in your vehicle? ")
-                        try:
-                            cont=cont.lower()
-                        except:
-                            pass
-                        if cont == "i":
-                            part_copy=part.copy()
-                            player["vehicle"],part = replace_part(player["vehicle"],part)
-                            if part_copy != part:
-                                value = round(part["value"]/4,2)
-                                print("Replaced the {} and sold the old one for {}!  Now at ${}".format(
+                    cont=input("(S)ell it or try to (i)nstall it in your vehicle? ")
+                    try:
+                        cont=cont.lower()
+                    except:
+                        pass
+                    if cont == "i":
+                        part_copy=part.copy()
+                        player["vehicle"],part = replace_part(player["vehicle"],part)
+                        if part_copy != part:
+                            value = round(part["value"]/4,2)
+                            print("Replaced the {} and sold the old one for {}!  Now at ${}".format(
                                 part["type"],value,player["currency"]))
-                                player["currency"] += value
-                                return
-                        player["currency"] += value
-                        print("Sold!  Now at ${}".format(player["currency"]))
-                    else:
-                        print("{} failed to find anything worthwhile".format(mechanic["name"]))
-                    for skill in mechanic["skills"]:
-                        skill["xp"] += 10
-                        if skill["xp"] >= 100:
-                            skill["xp"] -= 100
-                            skill["level"] += 1
-                        display_character(mechanic)
-        
-    elif stop == "Plateau" or stop == "Volcano" or stop == "Field" or stop == "Forest" or stop == "Escarpment" or stop == "Fissure" or stop == "Cave":
+                            player["currency"] += value
+                            return
+                    player["currency"] += value
+                    print("Sold!  Now at ${}".format(player["currency"]))
+                else:
+                    print("{} failed to find anything worthwhile".format(mechanic["name"]))
+                for skill in mechanic["skills"]:
+                    skill["xp"] += 10
+                    if skill["xp"] >= 100:
+                        skill["xp"] -= 100
+                        skill["level"] += 1
+                    display_character(mechanic)
+                        
+                        
+def science_stop(network,player,stop,location_name):
         print("You can conduct field research here with a skilled scientist")
         scientist_present=False
         sublist = []
@@ -1992,14 +1997,10 @@ def interact_with_stop(network,player,stop,location_name):
                             skill["xp"] -= 100
                             skill["level"] += 1
                         display_character(scientist)
-                    
-    elif stop == "Intersection":
-        print("A side road starts here.  It does not lead to a town.")
-        
-    elif stop == "Campsite" or stop == "Rest Stop":
-        print("You can park here and rest for a while")
-        
-    elif stop == "Racetrack":
+                        
+                        
+                        
+def racetrack(player):
         print("You can earn currency here with a skilled driver")
         driver_present=False
         sublist = []
@@ -2032,9 +2033,10 @@ def interact_with_stop(network,player,stop,location_name):
                         skill["xp"] -= 100
                         skill["level"] += 1
                     display_character(driver)
-                
-        
-    elif stop == "Warehouse":
+                    
+                    
+                    
+def warehouse(network,player,location_name):
         print(short_border)
         print("You can accept or complete delivery contracts at places like this")
         for item in player["vehicle"]["chassis"]["cabin"]["cargo"]:
@@ -2068,8 +2070,10 @@ def interact_with_stop(network,player,stop,location_name):
                 player["travel_log"].append("  {} to {}".format(cargo["name"],cargo["destination"]))
                 player["travel_log"].append("  "+str(route)+"\n")
         print(short_border)
-        
-    elif stop == "Auto Shop":
+    
+    
+    
+def auto_shop(player):
         print("You can purchase vehicle resources and new components here")
         part_count = random.randrange(3,6)
         parts_list = []
@@ -2108,6 +2112,43 @@ def interact_with_stop(network,player,stop,location_name):
             if choice == "":
                 break
         return
+    
+    
+        
+        
+## MAIN LOOP FOR INTERACTING WITH STOPS OR AMENITIES ##
+## OUTCOME DIFFERS BASED ON STOP NAME AND LOCATION ##
+## TO BE SPLIT INTO DISCRETE FUNCTIONS BASED ON STOP TYPE ##
+def interact_with_stop(network,player,stop,location_name):
+    if stop == "Gas Station":
+        gas_station(player)
+        
+    elif stop == "Farm":
+        farm(player)
+            
+    elif stop == "Garage" or stop == "Repair Shop":
+        repair_vehicle(player)
+        
+    elif stop == "Junkyard" or stop == "Salvage Yard":
+        junkyard(player)
+        
+    elif stop == "Plateau" or stop == "Volcano" or stop == "Field" or stop == "Forest" or stop == "Escarpment" or stop == "Fissure" or stop == "Cave":
+        science_stop(network,player,stop,location_name)
+                    
+    elif stop == "Intersection":
+        print("A side road starts here.  It does not lead to a town.")
+        
+    elif stop == "Campsite" or stop == "Rest Stop":
+        print("You can park here and rest for a while")
+        
+    elif stop == "Racetrack":
+        racetrack(player)
+        
+    elif stop == "Warehouse":
+        warehouse(network,player,location_name)
+        
+    elif stop == "Auto Shop":
+        auto_shop(player)
         
     elif stop == "Convenience Store":
         print("You can purchase food and other human resources here")
@@ -2159,6 +2200,7 @@ def display_part(part):
         print("{} liter capacity".format(str(part["capacity"])))
     print(short_border+"\n")
     
+        # THIS DATA FOR REFERENCE ONLY
         #{"brand": "Yolo",
         # "model": "Hurricane",
         # "type": "Turbo",
@@ -2286,6 +2328,14 @@ def calculate_vehicle_value(vehicle):
         pass
     
     return(total_value)
+
+
+## BORE AND STROKE LISTED IN INCHES, RETURNS CC OF ENGINE
+## 88.98 WAS CALCULATED FROM FORMULA
+def calculate_engine_displacement(engine):
+    displacement  = engine['bore']*engine['stroke']*engine['cylinders']
+    displacement = displacement*88.98
+    return(displacement)
 
 
 ## FUNCTIONING VEHICLE BUT WITH NO CHARACTERS APPENDED ##
@@ -2439,6 +2489,7 @@ def calculate_engine_weight(eng):
     
 
 ## SELF-DESCRIPTIVE ##
+## PRINTS STATS FOR EVERY ENGINE IN DATABASE ##
 def print_engine_stats():
     for engine in parts["engine"]:
         hp = calculate_base_horsepower(engine)
@@ -2446,8 +2497,10 @@ def print_engine_stats():
         torque = calculate_base_torque(engine)
         hpt = round(hp / (kg/1000),2)
         tpt = round(torque / (kg/1000),2)
-        print("{}\t{} produces:\n{} horsepower,\t{} lb/ft torque,\tweighs {}kg\t{} hp/t\n".format(
-            engine["brand"],engine["model"],str(hp),str(torque),str(kg),str(hpt)))
+        displacement = calculate_engine_displacement(engine)
+        liters = round(displacement/1000,2)
+        print("{}\t{}, {}l produces:\n{} horsepower,\t{} lb/ft torque,\tweighs {}kg\t{} hp/t\n".format(
+            engine["brand"],engine["model"],str(liters),str(hp),str(torque),str(kg),str(hpt)))
 
 
 ## GIVEN A CHASSIS, RETURN HANDLING AND STABILITY VALUES ##
