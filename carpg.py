@@ -2104,10 +2104,12 @@ def auto_shop(player):
             choice=input("Wanna take a closer look at any of these parts? (1-9) ")
             for part_boxed in parts_list:
                 if choice == str(part_boxed[1]):
-                    display_part(part_boxed[0])
                     if not part_compatible_with(player["vehicle"],part_boxed[0]):
+						display_part(part_boxed[0])
                         print("This part is not compatible with your vehicle!")
                         return
+					part2 = match_vehicle_part(vehicle,part_boxed[0])
+					compare_parts(part_boxed[0],part2)
                     cont=input("Want to purchase this part and install it on your vehicle? (y/n) ")
                     if cont=="y":
                         if player["currency"] < part_boxed[0]["value"]:
@@ -2189,6 +2191,7 @@ def interact_with_stop(network,player,stop,location_name):
         print("What the hell is this place?  It's not listed in my atlas...")
 			
 			
+# GIVEN A VEHICLE AND A SPARE PART, FIND MATCHING PART IN VEHICLE			
 def match_vehicle_part(vehicle,part1):
 	chassis_parts = ["Engine","Cabin","Fuel Tank"]
 	part_type = part1["type"]
@@ -2206,7 +2209,7 @@ def match_vehicle_part(vehicle,part1):
 	return(part2)
 			
 			
-## CMPARES TWO SIMILAR PARTS AND HIGHLIGHTS DIFFERENCES ##
+## COMPARES TWO SIMILAR PARTS AND HIGHLIGHTS DIFFERENCES ##
 def compare_parts(part1,part2):
 	if part1["type"] != part2["type"]:
 		print("These parts are dissimilar.  Cannot compare them!")
