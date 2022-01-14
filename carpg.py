@@ -2214,6 +2214,9 @@ def match_vehicle_part(vehicle,part1):
 			
 ## COMPARES TWO SIMILAR PARTS AND HIGHLIGHTS DIFFERENCES ##
 def compare_parts(part1,part2):
+    if part1 == "" or part2 == "":
+        print("One of these parts is blank!")
+        return
 	if part1["type"] != part2["type"]:
 		print("These parts are dissimilar.  Cannot compare them!")
 		return
