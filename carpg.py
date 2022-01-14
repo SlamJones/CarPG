@@ -2103,11 +2103,11 @@ def auto_shop(player):
         while choice != "":
             choice=input("Wanna take a closer look at any of these parts? (1-9) ")
             for part_boxed in parts_list:
-            	if choice == str(part_boxed[1]):
-					if not part_compatible_with(player["vehicle"],part_boxed[0]):
-						display_part(part_boxed[0])
-                    	print("This part is not compatible with your vehicle!")
-                    	return
+                if choice == str(part_boxed[1]):
+                    if not part_compatible_with(player["vehicle"],part_boxed[0]):
+                        display_part(part_boxed[0])
+                        print("This part is not compatible with your vehicle!")
+                        return
 					part2 = match_vehicle_part(vehicle,part_boxed[0])
 					compare_parts(part_boxed[0],part2)
                     cont=input("Want to purchase this part and install it on your vehicle? (y/n) ")
