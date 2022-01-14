@@ -2220,8 +2220,8 @@ def compare_parts(part1,part2):
     if part1["type"] != part2["type"]:
         print("These parts are dissimilar.  Cannot compare them!")
         return
-	for part in [part1,part2]:
-		display_part(part)
+    for part in [part1,part2]:
+        display_part(part)
         
         
 ## PRINTS A VERBOSE DESCRIPTION OF GIVEN PART ##
