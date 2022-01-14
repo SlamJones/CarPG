@@ -1956,7 +1956,10 @@ def junkyard(player):
                         part_copy=part.copy()
                         player["vehicle"],part = replace_part(player["vehicle"],part)
                         if part_copy != part:
-                            value = round(part["value"]/4,2)
+                            if part == "":
+                                print("Installed {}!".format(part["type"]))
+                                return
+                            value = int(round(part["value"]/4,2))
                             print("Replaced the {} and sold the old one for {}!  Now at ${}".format(
                                 part["type"],value,player["currency"]))
                             player["currency"] += value
