@@ -2216,7 +2216,7 @@ def match_vehicle_part(vehicle,part1):
 def compare_parts(part1,part2):
     if part1 == "" or part2 == "":
         print("One of these parts is blank!")
-        return
+        #return
     if part1["type"] != part2["type"]:
         print("These parts are dissimilar.  Cannot compare them!")
         return
