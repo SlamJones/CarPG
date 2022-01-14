@@ -2235,7 +2235,8 @@ def display_part(part):
         part["size"],part["value"],part["weight"]))
     print("{} / {} durability\n".format(part["durability"],part["max_durability"]))
     if part["type"] == "Engine":
-        print("{} hp, {} torque".format(part["base_horsepower"],part["base_torque"]))
+        print("{} hp, {} torque, {} mpg".format(
+            part["base_horsepower"],part["base_torque"],part["base_mpg"]))
     elif part["type"] == "Turbo":
         print("{} hp factor, {} torque factor, {} mpg factor".format(
             part["horsepower_factor"],part["torque_factor"],part["mpg_factor"]))
