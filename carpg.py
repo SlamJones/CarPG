@@ -2217,7 +2217,7 @@ def compare_parts(part1,part2):
     if part1 == "" or part2 == "":
         print("One of these parts is blank!")
         #return
-    if part1["type"] != part2["type"]:
+    elif part1["type"] != part2["type"]:
         print("These parts are dissimilar.  Cannot compare them!")
         return
     for part in [part1,part2]:
