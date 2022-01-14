@@ -64,10 +64,10 @@ town_types = [" Town","ville"," City","shire","bury","borough","by","ford","ham"
              " Beach"," Mesa"," Castle","view","port","dorf","field","burg","dale","grad", 
              " Village"," Hamlet"," Market"," Temple","side"," Grove"," Garden"," Hills"]
 
-amenities = ["Gas Station","Convenience Store","Junkyard","Rest Stop","Museum", "Auto Shop", "Garage","Library","Car Lot","Racetrack","Warehouse","Repair Shop","University","Casino"]
+amenities = ["Gas Station","Convenience Store","Junkyard","Rest Stop","Museum", "Auto Shop", "Garage","Library","Car Lot","Racetrack","Warehouse","Repair Shop","University","Casino","Parts Store"]
 amenities2 = {
     "low": ["Gas Station","Garage","Junkyard","Warehouse"],
-    "mid": ["Library","Auto Shop","Car Lot","Racetrack","Repair Shop"],
+    "mid": ["Library","Auto Shop","Car Lot","Racetrack","Repair Shop","Parts Store"],
     "high": ["Univeristy","Museum","Casino"]
 }
 
@@ -1956,7 +1956,10 @@ def junkyard(player):
                         part_copy=part.copy()
                         player["vehicle"],part = replace_part(player["vehicle"],part)
                         if part_copy != part:
-                            value = round(part["value"]/4,2)
+                            if part == "":
+                                print("Installed {}!".format(part["type"]))
+                                return
+                            value = int(round(part["value"]/4,2))
                             print("Replaced the {} and sold the old one for {}!  Now at ${}".format(
                                 part["type"],value,player["currency"]))
                             player["currency"] += value
@@ -2104,10 +2107,12 @@ def auto_shop(player):
             choice=input("Wanna take a closer look at any of these parts? (1-9) ")
             for part_boxed in parts_list:
                 if choice == str(part_boxed[1]):
-                    display_part(part_boxed[0])
                     if not part_compatible_with(player["vehicle"],part_boxed[0]):
+                        display_part(part_boxed[0])
                         print("This part is not compatible with your vehicle!")
                         return
+                    part2 = match_vehicle_part(player["vehicle"],part_boxed[0])
+                    compare_parts(part_boxed[0],part2)
                     cont=input("Want to purchase this part and install it on your vehicle? (y/n) ")
                     if cont=="y":
                         if player["currency"] < part_boxed[0]["value"]:
@@ -2154,7 +2159,7 @@ def interact_with_stop(network,player,stop,location_name):
     elif stop == "Warehouse":
         warehouse(network,player,location_name)
         
-    elif stop == "Auto Shop":
+    elif stop == "Auto Shop" or stop == "Parts Store":
         auto_shop(player)
         
     elif stop == "Convenience Store":
@@ -2187,6 +2192,39 @@ def interact_with_stop(network,player,stop,location_name):
         
     else:
         print("What the hell is this place?  It's not listed in my atlas...")
+			
+			
+# GIVEN A VEHICLE AND A SPARE PART, FIND MATCHING PART IN VEHICLE			
+def match_vehicle_part(vehicle,part1):
+	chassis_parts = ["Engine","Cabin","Fuel Tank"]
+	part_type = part1["type"]
+	if part_type == "Chassis":
+		part2 = vehicle["chassis"]
+	elif part_type in chassis_parts:
+		part2 = vehicle["chassis"][part_type.lower().replace(' ','_')]
+	elif part_type == "Turbo":
+		try:
+			part2 = vehicle["chassis"]["engine"]["turbo"]
+		except:
+			part2 = ""
+	else:
+		print("This part cannot be matched!")
+	return(part2)
+			
+			
+## COMPARES TWO SIMILAR PARTS AND HIGHLIGHTS DIFFERENCES ##
+def compare_parts(part1,part2):
+    if part1 == "" or part2 == "":
+        print("One of these parts is blank!")
+        #return
+    elif part1["type"] != part2["type"]:
+        print("These parts are dissimilar.  Cannot compare them!")
+        return
+    for part in [part1,part2]:
+        try:
+            display_part(part)
+        except:
+            pass
         
         
 ## PRINTS A VERBOSE DESCRIPTION OF GIVEN PART ##
@@ -2197,7 +2235,8 @@ def display_part(part):
         part["size"],part["value"],part["weight"]))
     print("{} / {} durability\n".format(part["durability"],part["max_durability"]))
     if part["type"] == "Engine":
-        print("{} hp, {} torque".format(part["base_horsepower"],part["base_torque"]))
+        print("{} hp, {} torque, {} mpg".format(
+            part["base_horsepower"],part["base_torque"],part["base_mpg"]))
     elif part["type"] == "Turbo":
         print("{} hp factor, {} torque factor, {} mpg factor".format(
             part["horsepower_factor"],part["torque_factor"],part["mpg_factor"]))
