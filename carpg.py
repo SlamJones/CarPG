@@ -2201,7 +2201,7 @@ def match_vehicle_part(vehicle,part1):
 	if part_type == "Chassis":
 		part2 = vehicle["chassis"]
 	elif part_type in chassis_parts:
-		part2 = vehicle["chassis"][part_type.lower()]
+		part2 = vehicle["chassis"][part_type.lower().replace(' ','_')]
 	elif part_type == "Turbo":
 		try:
 			part2 = vehicle["chassis"]["engine"]["turbo"]
