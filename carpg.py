@@ -2187,6 +2187,32 @@ def interact_with_stop(network,player,stop,location_name):
         
     else:
         print("What the hell is this place?  It's not listed in my atlas...")
+			
+			
+def match_vehicle_part(vehicle,part1):
+	chassis_parts = ["Engine","Cabin","Fuel Tank"]
+	part_type = part1["type"]
+	if part_type == "Chassis":
+		part2 = vehicle["chassis"]
+	elif part_type in chassis_parts:
+		part2 = vehicle["chassis"][part_type]
+	elif part_type == "Turbo":
+		try:
+			part2 = vehicle["chassis"]["engine"]["turbo"]
+		except:
+			part2 = ""
+	else:
+		print("This part cannot be matched!")
+	return(part2)
+			
+			
+## CMPARES TWO SIMILAR PARTS AND HIGHLIGHTS DIFFERENCES ##
+def compare_parts(part1,part2):
+	if part1["type"] != part2["type"]:
+		print("These parts are dissimilar.  Cannot compare them!")
+		return
+	for part in [part1,part2]:
+		display_part(part)
         
         
 ## PRINTS A VERBOSE DESCRIPTION OF GIVEN PART ##
