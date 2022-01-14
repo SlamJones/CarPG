@@ -2108,8 +2108,8 @@ def auto_shop(player):
                         display_part(part_boxed[0])
                         print("This part is not compatible with your vehicle!")
                         return
-					part2 = match_vehicle_part(vehicle,part_boxed[0])
-					compare_parts(part_boxed[0],part2)
+                    part2 = match_vehicle_part(vehicle,part_boxed[0])
+                    compare_parts(part_boxed[0],part2)
                     cont=input("Want to purchase this part and install it on your vehicle? (y/n) ")
                     if cont=="y":
                         if player["currency"] < part_boxed[0]["value"]:
