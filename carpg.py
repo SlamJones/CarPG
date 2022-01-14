@@ -64,10 +64,10 @@ town_types = [" Town","ville"," City","shire","bury","borough","by","ford","ham"
              " Beach"," Mesa"," Castle","view","port","dorf","field","burg","dale","grad", 
              " Village"," Hamlet"," Market"," Temple","side"," Grove"," Garden"," Hills"]
 
-amenities = ["Gas Station","Convenience Store","Junkyard","Rest Stop","Museum", "Auto Shop", "Garage","Library","Car Lot","Racetrack","Warehouse","Repair Shop","University","Casino"]
+amenities = ["Gas Station","Convenience Store","Junkyard","Rest Stop","Museum", "Auto Shop", "Garage","Library","Car Lot","Racetrack","Warehouse","Repair Shop","University","Casino","Parts Store"]
 amenities2 = {
     "low": ["Gas Station","Garage","Junkyard","Warehouse"],
-    "mid": ["Library","Auto Shop","Car Lot","Racetrack","Repair Shop"],
+    "mid": ["Library","Auto Shop","Car Lot","Racetrack","Repair Shop","Parts Store"],
     "high": ["Univeristy","Museum","Casino"]
 }
 
@@ -2159,7 +2159,7 @@ def interact_with_stop(network,player,stop,location_name):
     elif stop == "Warehouse":
         warehouse(network,player,location_name)
         
-    elif stop == "Auto Shop":
+    elif stop == "Auto Shop" or stop == "Parts Store":
         auto_shop(player)
         
     elif stop == "Convenience Store":
