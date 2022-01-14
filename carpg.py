@@ -2221,7 +2221,10 @@ def compare_parts(part1,part2):
         print("These parts are dissimilar.  Cannot compare them!")
         return
     for part in [part1,part2]:
-        display_part(part)
+        try:
+            display_part(part)
+        except:
+            pass
         
         
 ## PRINTS A VERBOSE DESCRIPTION OF GIVEN PART ##
