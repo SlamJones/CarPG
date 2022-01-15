@@ -697,7 +697,7 @@ prebuilt_cars = [
     },
     {
         'brand': 'DriveTime',
-        'model': 'Gofast',
+        'model': 'GoFast',
         'parts': ['chassis flexx racer','engine rattatata thresher_145','cabin pigeon nest','fuel_tank pigeon mini_tank']
     }
 ]
@@ -2652,8 +2652,8 @@ def replace_part(vehicle,new_part):
         cont=input("Keep seats? (y/n) ")
         if cont == "y":
             print("Sorry, can't yet!")
-        old_part = vehicle["chassis"][new_part["type"]].copy()
-        vehicle["chassis"][new_part["type"]]=new_part
+        old_part = vehicle["chassis"][new_part["type"].lower()].copy()
+        vehicle["chassis"][new_part["type"].lower()]=new_part
         install_seats(vehicle)
     elif new_part["type"] == "Turbo":
         if vehicle["chassis"]["engine"]["turbo"] == "":
@@ -2757,14 +2757,19 @@ def build_prebuilt_car(brand,model):
     for car in prebuilt_cars:
         if brand == car['brand']:
             if model == car['model']:
+                print("Prebuild found!")
                 for part_string in car['parts']:
                     new_part = interpret_part_string(part_string)
+                    if new_part["type"].lower() == "chassis":
+                        newcar["chassis"] = new_part
+                        print("Installed chassis")
+                for part_string in car['parts']:
+                    new_part = interpret_part_string(part_string)
+                    part_type = new_part["type"].lower().replace(' ','_')
                     print("Received {}: {} {}".format(
                         new_part["type"],new_part["brand"],new_part["model"]))
-                    if new_part["type"] == "chassis":
-                        newcar["chassis"] = new_part
-                    else:
-                        newcar[new_part["type"]] = new_part
+                    if new_part["type"].lower() != "chassis":
+                        newcar["chassis"][part_type] = new_part
             newcar['brand'] = car['brand']
             newcar['model'] = car['model']
             newcar['name'] = str(random.choice(names)+"mobile")
@@ -2773,12 +2778,20 @@ def build_prebuilt_car(brand,model):
     
 ## RETURNS A RANDOM PREBUILT CAR FROM SPECIFIED BRAND ##    
 def build_prebuilt_car_brand(brand):
-    modellist = []
+    model_list = []
     for car in prebuilt_cars:
         if brand == car['brand']:
-            modellist.append(car['model'])
-    print(modellist)
+            model_list.append(car['model'])
+    return(model_list)
             
+    
+## RETURNS A LIST OF MODELS MADE BY GIVEN BRAND ##
+def car_brand_list():
+    brand_list = []
+    for car in prebuilt_cars:
+        if car['brand'] not in brand_list:
+            brand_list.append(car['brand'])
+    return(brand_list)
         
 
 ## RETURN A NEW CAR WITH COMPLETELY RANDOM (POTENTIALLY INCOMPATIBLE) PARTS ##
