@@ -2707,6 +2707,25 @@ def build_vehicle():
     return(newcar)
 
 
+def part_string(part):
+    part_string = "{} {} {}".format(
+        part["type"].lower().replace(' ','_'),
+        part["brand"].lower().replace(' ','_'),
+        part["model"].lower().replace(' ','_'))
+    return(part_string)
+
+
+def interpret_part_string(part_string):
+    string_list = part_string.split()
+    part_type = string_list[0]
+    part_brand = string_list[1]
+    part_model = string_list[2]
+    if part_type == "chassis":
+        for part in parts["chassis"]:
+            if part["brand"] == part_brand & part["model"] == part_model:
+                return(part)
+
+
 ## CREATES A NEW VEHICLE BASED ON PARAMETER AND VALUE ##
 ## EX: parameter "brand", value "Steelworks" RETURNS A VEHICLE WITH ALL STEELWORKS-BRAND PARTS ##
 def parts_by_parameter(car,parameter,value):
