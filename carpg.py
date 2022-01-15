@@ -1833,18 +1833,6 @@ def direction(heading):
 ## -- RANDOM FUNCTIONS -- ##
 
 
-## PICK A RANDOM PART FROM PART LIST, MAKE IT OLD ##
-def salvage_random_part():
-    categories = []
-    for category in parts:
-        categories.append(category)
-    category = random.choice(categories)
-    part = random.choice(parts[category])
-    part = make_part_old(part)
-    part["durability"] = random.randrange(5,part["max_durability"])
-    return(part)
-
-
 def gas_station(player):
     print("You have ${}".format(round(player["currency"],2)))
     fuel_price = round(random.uniform(1.2,2.4),2)
@@ -2724,6 +2712,25 @@ def interpret_part_string(part_string):
         for part in parts["chassis"]:
             if part["brand"] == part_brand & part["model"] == part_model:
                 return(part)
+    categories = []
+    for category in parts:
+        categories.append(category)
+    if part_type in categories:
+        for part in parts[part_type]:
+            if part["brand"] == part_brand & part["model"] == part_model:
+                return(part)
+
+
+## PICK A RANDOM PART FROM PART LIST, MAKE IT OLD ##
+def salvage_random_part():
+    categories = []
+    for category in parts:
+        categories.append(category)
+    category = random.choice(categories)
+    part = random.choice(parts[category])
+    part = make_part_old(part)
+    part["durability"] = random.randrange(5,part["max_durability"])
+    return(part)
 
 
 ## CREATES A NEW VEHICLE BASED ON PARAMETER AND VALUE ##
