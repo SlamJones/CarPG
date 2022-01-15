@@ -686,9 +686,14 @@ prebuilt_cars = [
         'parts': ['chassis pigeon carrier','engine pigeon econo_24','cabin pigeon nest','fuel_tank pigeon mini_tank']
     },
     {
-        'brand': 'Steelworks',
+        'brand': 'SteelWorks',
         'model': 'S225 Short Crew',
         'parts': ['chassis steelworks 2-ton chassis','engine steelworks steel_225','cabin steelworks shortbed_crew_cab','fuel_tank steelworks venturetank']
+    },
+    {
+        'brand': 'SteelWorks',
+        'model': 'S225 Long Crew',
+        'parts': ['chassis steelworks 2-ton chassis','engine steelworks steel_225','cabin steelworks longbed_crew_cab','fuel_tank steelworks venturetank']
     },
     {
         'brand': 'DriveTime',
@@ -2764,6 +2769,16 @@ def build_prebuilt_car(brand,model):
             newcar['model'] = car['model']
             newcar['name'] = str(random.choice(names)+"mobile")
             return(newcar)
+    
+    
+## RETURNS A RANDOM PREBUILT CAR FROM SPECIFIED BRAND ##    
+def build_prebuilt_car_brand(brand):
+    modellist = []
+    for car in prebuilt_cars:
+        if brand == car['brand']:
+            modellist.append(car['model'])
+    print(modellist)
+            
         
 
 ## RETURN A NEW CAR WITH COMPLETELY RANDOM (POTENTIALLY INCOMPATIBLE) PARTS ##
