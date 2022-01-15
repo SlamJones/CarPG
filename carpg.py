@@ -699,7 +699,17 @@ prebuilt_cars = [
         'brand': 'DriveTime',
         'model': 'GoFast',
         'parts': ['chassis flexx racer','engine rattatata thresher_145','cabin pigeon nest','fuel_tank pigeon mini_tank']
-    }
+    },
+    {
+        'brand': 'DriveTime',
+        'model': 'GoFaster',
+        'parts': ['chassis flexx racer','engine rattatata thresher_145','cabin pigeon nest','fuel_tank pigeon mini_tank','turbo yolo breeze']
+    },
+    {
+        'brand': 'DriveTime',
+        'model': 'Speed Machine',
+        'parts': ['chassis flexx racer','engine rattatata thresher_145','cabin pigeon nest','fuel_tank pigeon mini_tank','turbo yolo hurricane']
+    },
 ]
     
     
@@ -2755,21 +2765,23 @@ def interpret_part_string(part_string):
 def build_prebuilt_car(brand,model):
     newcar = new_vehicle()
     for car in prebuilt_cars:
-        if brand == car['brand']:
-            if model == car['model']:
-                print("Prebuild found!")
-                for part_string in car['parts']:
-                    new_part = interpret_part_string(part_string)
-                    if new_part["type"].lower() == "chassis":
-                        newcar["chassis"] = new_part
-                        print("Installed chassis")
-                for part_string in car['parts']:
-                    new_part = interpret_part_string(part_string)
-                    part_type = new_part["type"].lower().replace(' ','_')
-                    print("Received {}: {} {}".format(
-                        new_part["type"],new_part["brand"],new_part["model"]))
-                    if new_part["type"].lower() != "chassis":
-                        newcar["chassis"][part_type] = new_part
+        print("Checking {} {}".format(car['brand'],car['model']))
+        if (brand == car['brand']) & (model == car['model']):
+            print("Prebuild found!")
+            for part_string in car['parts']:
+                new_part = interpret_part_string(part_string)
+                if new_part["type"].lower() == "chassis":
+                    newcar["chassis"] = new_part
+                    print("Installed chassis")
+            for part_string in car['parts']:
+                new_part = interpret_part_string(part_string)
+                part_type = new_part["type"].lower().replace(' ','_')
+                print("Received {}: {} {}".format(
+                    new_part["type"],new_part["brand"],new_part["model"]))
+                if new_part["type"].lower() != "chassis":
+                    newcar["chassis"][part_type] = new_part
+                if new_part["type"].lower() == "turbo":
+                    newcar["chassis"]["engine"][part_type] == new_part
             newcar['brand'] = car['brand']
             newcar['model'] = car['model']
             newcar['name'] = str(random.choice(names)+"mobile")
@@ -2777,7 +2789,7 @@ def build_prebuilt_car(brand,model):
     
     
 ## RETURNS A RANDOM PREBUILT CAR FROM SPECIFIED BRAND ##    
-def build_prebuilt_car_brand(brand):
+def car_models_by_brand(brand):
     model_list = []
     for car in prebuilt_cars:
         if brand == car['brand']:
@@ -2792,6 +2804,15 @@ def car_brand_list():
         if car['brand'] not in brand_list:
             brand_list.append(car['brand'])
     return(brand_list)
+
+
+## PRINTS A LIST OF ALL PREBUILT BRANDS AND THEIR RESPECTIVE MODELS ##
+def car_model_list():
+    brand_list = car_brand_list()
+    for brand in brand_list:
+        print(short_border +" "+ brand +" "+ short_border)
+        print(car_models_by_brand(brand))
+        print("\n")
         
 
 ## RETURN A NEW CAR WITH COMPLETELY RANDOM (POTENTIALLY INCOMPATIBLE) PARTS ##
