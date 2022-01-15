@@ -688,12 +688,12 @@ prebuilt_cars = [
     {
         'brand': 'SteelWorks',
         'model': 'S225 Short Crew',
-        'parts': ['chassis steelworks 2-ton chassis','engine steelworks steel_225','cabin steelworks shortbed_crew_cab','fuel_tank steelworks venturetank']
+        'parts': ['chassis steelworks 2-ton_chassis','engine steelworks steel_225','cabin steelworks shortbed_crew_cab','fuel_tank steelworks venturetank']
     },
     {
         'brand': 'SteelWorks',
         'model': 'S225 Long Crew',
-        'parts': ['chassis steelworks 2-ton chassis','engine steelworks steel_225','cabin steelworks longbed_crew_cab','fuel_tank steelworks venturetank']
+        'parts': ['chassis steelworks 2-ton_chassis','engine steelworks steel_225','cabin steelworks longbed_crew_cab','fuel_tank steelworks venturetank']
     },
     {
         'brand': 'DriveTime',
@@ -707,8 +707,13 @@ prebuilt_cars = [
     },
     {
         'brand': 'DriveTime',
-        'model': 'Speed Machine',
+        'model': 'GoFastest',
         'parts': ['chassis flexx racer','engine rattatata thresher_145','cabin pigeon nest','fuel_tank pigeon mini_tank','turbo yolo hurricane']
+    },
+    {
+        'brand': 'Universal',
+        'model': 'Bus',
+        'parts': ['chassis universal bus_chassis_01','engine universal vstroke_420','cabin universal bus_cab','fuel_tank universal endurotank']
     },
 ]
     
