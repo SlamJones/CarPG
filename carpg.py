@@ -686,6 +686,11 @@ prebuilt_cars = [
         'parts': ['chassis pigeon carrier','engine pigeon econo_24','cabin pigeon nest','fuel_tank pigeon mini_tank']
     },
     {
+        'brand': 'Pigeon',
+        'model': 'Racing',
+        'parts': ['chassis pigeon carrier','engine pigeon econo_24','cabin pigeon nest','fuel_tank pigeon mini_tank','turbo yolo breeze']
+    },
+    {
         'brand': 'SteelWorks',
         'model': 'S225 Short Crew',
         'parts': ['chassis steelworks 2-ton_chassis','engine steelworks steel_225','cabin steelworks shortbed_crew_cab','fuel_tank steelworks venturetank']
@@ -2454,15 +2459,17 @@ def display_vehicle(vehicle):
     mpg = eng["base_mpg"]
     miles = mpg*tank["capacity"]
     weight = calculate_weight(vehicle)
-    hpt = eng["base_horsepower"]/(weight/1000)
+    hp = calculate_horsepower(vehicle)
+    hpt = hp/(weight/1000)
     empg = effective_mpg(vehicle)
     max_range = empg*tank["fuel"]
     emiles = round(empg*tank["capacity"],2)
     max_speed = calculate_max_speed(vehicle)
     
+    
     print("\n")
     print("{}, the {} {}".format(vehicle["name"],vehicle["brand"],vehicle["model"]))
-    print("{} kg, {} hp, {} mpg".format(weight,eng["base_horsepower"],empg))
+    print("{} kg, {} hp, {} mpg".format(weight,hp,empg))
     print("{} hp/t, {} kmh top speed".format(int(hpt),max_speed))
     print("{} {} produces {} hp, using {} mpg  ({}/{} dur)".format(
         eng["brand"],eng["model"],eng["base_horsepower"],eng["base_mpg"],
@@ -2510,6 +2517,10 @@ def effective_mpg(car):
     base_mpg=car["chassis"]["engine"]["base_mpg"]
     torque_factor,drag_factor=calculate_car_factors(car)
     mpg = round((base_mpg*torque_factor*drag_factor)-(weight_factor/torque_factor),2)
+    try:
+        mpg = mpg*car["chassis"]["engine"]["turbo"]["mpg_factor"]
+    except:
+        pass
     return(mpg)
     
     
@@ -2603,6 +2614,7 @@ def calculate_horsepower(car):
     eng = car["chassis"]["engine"]
     horsepower = car["chassis"]["engine"]["base_horsepower"] * eng["compression"]
     try:
+        print(eng["turbo"]["horsepower_factor"])
         horsepower = horsepower * eng["turbo"]["horsepower_factor"]
     except:
         pass
@@ -2785,8 +2797,12 @@ def build_prebuilt_car(brand,model):
                     new_part["type"],new_part["brand"],new_part["model"]))
                 if new_part["type"].lower() != "chassis":
                     newcar["chassis"][part_type] = new_part
+            for part_string in car['parts']:
+                new_part = interpret_part_string(part_string)
                 if new_part["type"].lower() == "turbo":
-                    newcar["chassis"]["engine"][part_type] == new_part
+                    newcar["chassis"]["engine"]["turbo"] = new_part
+                else:
+                    newcar["chassis"]["engine"]["turbo"] = ""
             newcar['brand'] = car['brand']
             newcar['model'] = car['model']
             newcar['name'] = str(random.choice(names)+"mobile")
