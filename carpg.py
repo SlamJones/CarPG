@@ -679,10 +679,29 @@ class jobs:
     ]
     
     
+prebuilt_cars = [
+    {
+        'brand': 'Pigeon',
+        'model': 'Carrier',
+        'parts': ['chassis pigeon carrier','engine pigeon econo_24','cabin pigeon nest','fuel_tank pigeon mini_tank']
+    },
+    {
+        'brand': 'Steelworks',
+        'model': 'S225 Short Crew',
+        'parts': ['chassis steelworks 2-ton chassis','engine steelworks steel_225','cabin steelworks shortbed_crew_cab','fuel_tank steelworks venturetank']
+    },
+    {
+        'brand': 'DriveTime',
+        'model': 'Gofast',
+        'parts': ['chassis flexx racer','engine rattatata thresher_145','cabin pigeon nest','fuel_tank pigeon mini_tank']
+    }
+]
+    
     
     
     
 ##### COMMON FUNCTIONS LIST BELOW #####    
+
     
 def random_town_name():
     return (random.choice(names)+random.choice(town_types))
@@ -2603,7 +2622,10 @@ def replace_part(vehicle,new_part):
             new_part["brand"],new_part["model"]))
         return(vehicle,new_part)
     partslist = ["Engine","Fuel Tank"]
-    fuel = vehicle["chassis"]["fuel_tank"]["fuel"]
+    try:
+        fuel = vehicle["chassis"]["fuel_tank"]["fuel"]
+    except:
+        fuel = 0
     if new_part["type"] == "Chassis":
         cont=input("Keep cabin, engine, and fuel tank? (y/n) ")
         if cont == "y":
@@ -2682,9 +2704,9 @@ def display_character(character):
 ## RETURNS A NEW SLAMTEK VEHICLE ##
 def build_vehicle():
     newcar = new_vehicle()
-    newcar=random_car_parts(newcar)
+    newcar = random_car_parts(newcar)
     
-    newcar=parts_by_parameter(newcar,"brand","SlamTek")
+    newcar = parts_by_parameter(newcar,"brand","SlamTek")
     newcar = make_car_old(newcar)
     newcar["name"] = random.choice(names)+"car"
     newcar["brand"] = "SlamTek"
@@ -2695,6 +2717,7 @@ def build_vehicle():
     return(newcar)
 
 
+## TAKES A PART AND RETURNS A STRING THAT DESCRIBES A PART ##
 def part_string(part):
     part_string = "{} {} {}".format(
         part["type"].lower().replace(' ','_'),
@@ -2703,22 +2726,53 @@ def part_string(part):
     return(part_string)
 
 
+## TAKES A PART STRING AND RETURNS THE DESCRIBED PART ##
 def interpret_part_string(part_string):
     string_list = part_string.split()
-    part_type = string_list[0]
-    part_brand = string_list[1]
-    part_model = string_list[2]
-    if part_type == "chassis":
-        for part in parts["chassis"]:
-            if part["brand"] == part_brand & part["model"] == part_model:
-                return(part)
+    if string_list[0] != "fuel_tank":
+        part_type = string_list[0].replace('_',' ')
+    else:
+        part_type = string_list[0]
+    part_brand = string_list[1].replace('_',' ')
+    part_model = string_list[2].replace('_',' ')
     categories = []
     for category in parts:
         categories.append(category)
     if part_type in categories:
         for part in parts[part_type]:
-            if part["brand"] == part_brand & part["model"] == part_model:
-                return(part)
+            if part["brand"].lower() == part_brand: 
+                if part["model"].lower() == part_model:
+                    return(part)
+        print("Couldn't find this part!")
+
+                
+## CREATE NEW VEHICLE FROM A LIST OF PART STRINGS ##                
+def build_prebuilt_car(brand,model):
+    newcar = new_vehicle()
+    for car in prebuilt_cars:
+        if brand == car['brand']:
+            if model == car['model']:
+                for part_string in car['parts']:
+                    new_part = interpret_part_string(part_string)
+                    print("Received {}: {} {}".format(
+                        new_part["type"],new_part["brand"],new_part["model"]))
+                    if new_part["type"] == "chassis":
+                        newcar["chassis"] = new_part
+                    else:
+                        newcar[new_part["type"]] = new_part
+            newcar['brand'] = car['brand']
+            newcar['model'] = car['model']
+            newcar['name'] = str(random.choice(names)+"mobile")
+            return(newcar)
+        
+
+## RETURN A NEW CAR WITH COMPLETELY RANDOM (POTENTIALLY INCOMPATIBLE) PARTS ##
+def random_car_parts(car):
+    car["chassis"]=random.choice(parts["chassis"]).copy()
+    car["chassis"]["engine"]=random.choice(parts["engine"]).copy()
+    car["chassis"]["cabin"]=random.choice(parts["cabin"]).copy()
+    car["chassis"]["fuel_tank"]=random.choice(parts["fuel_tank"]).copy()
+    return(car)
 
 
 ## PICK A RANDOM PART FROM PART LIST, MAKE IT OLD ##
@@ -2788,15 +2842,6 @@ def verify_parameters(parameter,value):
         return(True)
     else:
         return(False)
-        
-
-## RETURN A NEW CAR WITH COMPLETELY RANDOM (POTENTIALLY INCOMPATIBLE) PARTS ##
-def random_car_parts(car):
-    car["chassis"]=random.choice(parts["chassis"]).copy()
-    car["chassis"]["engine"]=random.choice(parts["engine"]).copy()
-    car["chassis"]["cabin"]=random.choice(parts["cabin"]).copy()
-    car["chassis"]["fuel_tank"]=random.choice(parts["fuel_tank"]).copy()
-    return(car)
     
         
 ## ORIGINALLY INTENDED TO ALLOW CREATION OF SPECIFIC VEHICLE ##
