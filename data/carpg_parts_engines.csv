@@ -1,0 +1,8 @@
+brand,model,type,value,size,weight,base_mpg,base_horsepower,base_torque,cylinders,bore,stroke,max_rpm,compression,turbo,durability,max_durability,wear_rate
+SlamTek,Based v4,Engine,150,"1",200,20,100,200,4,4,3,4500,1,[],100,100,1.0
+SlamTek,Based v6,Engine,200,"1",300,15,150,300,6,4,3,4500,1,[],100,100,1.0
+SlamTek,Heavy v6,Engine,200,"1",300,15,150,300,6,4,4.5,3000,1,[],100,100,1.0
+Pigeon,Econo 24,Engine,500,"1",100,30,50,75,4,3,2.4,5000,1,[],100,100,0.75
+Rattatata,Thresher 145,Engine,650,"1",500,10,300,200,6,4.5,2.5,8500,1,[],100,100,1.6
+Steelworks,Steel 225,Engine,600,"2",550,180,350,600,8,5,4.5,4500,1,[],100,100,1.0
+Universal,vStroke 420,Engine,850,"3",600,8,300,1000,10,5,8.5,3500,1,[],200,200,0.5

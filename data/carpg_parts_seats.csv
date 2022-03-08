@@ -1,0 +1,4 @@
+brand,model,type,value,weight,size,capacity,comfort,characters,durability,max_durability,wear_rate
+SlamTek,Seat 01,Seat,50,5,1,1,1,[],100,100,1.0
+SlamTek,Seat 02,Seat,150,10,1,1,2,[],100,100,1.0
+Universal,Basic Bus Seat,Sea,50,5,1,1,0,[],100,100,1.0

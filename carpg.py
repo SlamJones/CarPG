@@ -23,6 +23,8 @@ import random
 import math
 import subprocess
 import time
+import csv
+#import pandas
 
 from rpgf import color
 from rpgf import names
@@ -82,565 +84,82 @@ town_types2 = {
 
 help_string = long_border+"\nWelcome to CarPG!\n"+short_border+"\nYour goal is to gather currency!  You can do this by:\n Completing Warehouse Deliveries\n Collecting and Selling Science Samples\n Salvaging and Selling car parts, or\n Competing in Races and winning prize money!\n"+short_border+"\nThere is no win or lose condition yet: but you can consider running out of both currency and fuel to be a lose condition if you need one.\n"+short_border+"\nGood luck!!\n"+long_border
 
-
-## -- PARTS -- ##
+  
 parts = {
-    "chassis": [
-        {"brand": "SlamTek",
-         "model": "SlamChas",
-         "type": "Chassis",
-         "value": 100,
-         "size": "1",
-         "weight": 1000,
-         "engine": "",
-         "cabin": "",
-         "fuel_tank": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-         "weight_wear_factor": 1.0,
-         "wheelbase": 3.0,
-         "track": 1.5,
-         "wheels": 4,
-        },
-        {"brand": "SlamTek",
-         "model": "SlamChas2",
-         "type": "Chassis",
-         "value": 80,
-         "size": "1",
-         "weight": 1200,
-         "engine": "",
-         "cabin": "",
-         "fuel_tank": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-         "weight_wear_factor": 1.0,
-         "wheelbase": 3.2,
-         "track": 1.5,
-         "wheels": 4,
-        },
-        {"brand": "Pigeon",
-         "model": "Carrier",
-         "type": "Chassis",
-         "value": 200,
-         "size": "1",
-         "weight": 500,
-         "engine": "",
-         "cabin": "",
-         "fuel_tank": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.3,
-         "weight_wear_factor": 1.5,
-         "wheelbase": 1.5,
-         "track": 1.2,
-         "wheels": 3,
-        },
-        {"brand": "Flexx",
-         "model": "Racer",
-         "type": "Chassis",
-         "value": 500,
-         "size": "1",
-         "weight": 800,
-         "engine": "",
-         "cabin": "",
-         "fuel_tank": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.3,
-         "weight_wear_factor": 1.2,
-         "wheelbase": 1.8,
-         "track": 1.4,
-         "wheels": 4,
-        },
-        {"brand": "Steelworks",
-         "model": "2-ton Chassis",
-         "type": "Chassis",
-         "value": 250,
-         "size": "2",
-         "weight": 2000,
-         "engine": "",
-         "cabin": "",
-         "fuel_tank": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-         "weight_wear_factor": 1.0,
-         "wheelbase": 4.0,
-         "track": 1.7,
-         "wheels": 4,
-        },
-        {"brand": "Universal",
-         "model": "Bus Chassis 01",
-         "type": "Chassis",
-         "value": 250,
-         "size": "3",
-         "weight": 2500,
-         "engine": "",
-         "cabin": "",
-         "fuel_tank": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 0.5,
-         "weight_wear_factor": 0.5,
-         "wheelbase": 8.0,
-         "track": 1.9,
-         "wheels": 8,
-        }
-    ],
-    
-    "engine": [
-        {"brand": "SlamTek",
-         "model": "Based v4",
-         "type": "Engine",
-         "value": 150,
-         "size": "1",
-         "weight": 200,
-         "base_mpg": 20,
-         "base_horsepower": 100,
-         "base_torque": 200,
-         "cylinders": 4,
-         "bore": 4,
-         "stroke": 3,
-         "max_rpm": 4500,
-         "compression": 1,
-         "turbo": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "SlamTek",
-         "model": "Based v6",
-         "type": "Engine",
-         "value": 200,
-         "size": "1",
-         "weight": 300,
-         "base_mpg": 15,
-         "base_horsepower": 150,
-         "base_torque": 300,
-         "cylinders": 6,
-         "bore": 4,
-         "stroke": 3,
-         "max_rpm": 4500,
-         "compression": 1,
-         "turbo": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "SlamTek",
-         "model": "Heavy v6",
-         "type": "Engine",
-         "value": 200,
-         "size": "1",
-         "weight": 300,
-         "base_mpg": 15,
-         "base_horsepower": 150,
-         "base_torque": 300,
-         "cylinders": 6,
-         "bore": 4,
-         "stroke": 4.5,
-         "max_rpm": 3000,
-         "compression": 1,
-         "turbo": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Pigeon",
-         "model": "Econo 24",
-         "type": "Engine",
-         "value": 500,
-         "size": "1",
-         "weight": 100,
-         "base_mpg": 30,
-         "base_horsepower": 50,
-         "base_torque": 75,
-         "cylinders": 4,
-         "bore": 3,
-         "stroke": 2.4,
-         "max_rpm": 5000,
-         "compression": 1,
-         "turbo": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 0.75,
-        },
-        {"brand": "Rattatata",
-         "model": "Thresher 145",
-         "type": "Engine",
-         "value": 650,
-         "size": "1",
-         "weight": 500,
-         "base_mpg": 10,
-         "base_horsepower": 300,
-         "base_torque": 200,
-         "cylinders": 6,
-         "bore": 4.5,
-         "stroke": 2.5,
-         "max_rpm": 8500,
-         "compression": 1,
-         "turbo": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.6,
-        },
-        {"brand": "Steelworks",
-         "model": "Steel 225",
-         "type": "Engine",
-         "value": 600,
-         "size": "2",
-         "weight": 550,
-         "base_mpg": 18,
-         "base_horsepower": 350,
-         "base_torque": 600,
-         "cylinders": 8,
-         "bore": 5,
-         "stroke": 4.5,
-         "max_rpm": 4500,
-         "compression": 1,
-         "turbo": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Universal",
-         "model": "vStroke 420",
-         "type": "Engine",
-         "value": 850,
-         "size": "3",
-         "weight": 600,
-         "base_mpg": 8,
-         "base_horsepower": 300,
-         "base_torque": 1000,
-         "cylinders": 10,
-         "bore": 5,
-         "stroke": 8.5,
-         "max_rpm": 3500,
-         "compression": 1,
-         "turbo": "",
-         "durability": 200,
-         "max_durability": 200,
-         "wear_rate": 0.5,
-        },
-    ],
-    
-    "turbo": [
-        {"brand": "Yolo",
-         "model": "Hurricane",
-         "type": "Turbo",
-         "value": 750,
-         "size": 1,
-         "weight": 50,
-         "horsepower_factor": 1.2,
-         "torque_factor": 1.2,
-         "mpg_factor": 0.6,
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.5,
-        },
-        {"brand": "Yolo",
-         "model": "Breeze",
-         "type": "Turbo",
-         "value": 550,
-         "size": 1,
-         "weight": 25,
-         "horsepower_factor": 1.1,
-         "torque_factor": 1.1,
-         "mpg_factor": 0.8,
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.25,
-        }
-    ],
-
-    "cabin": [
-        {"brand": "SlamTek",
-         "model": "Short Cab",
-         "type": "Cabin",
-         "value": 250,
-         "size": "1",
-         "weight": 200,
-         "passengers": 2,
-         "max_cargo": 100,
-         "drag": 0.4,
-         "frontal_area": 2.3,
-         "cargo": [],
-         "seats": [],
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "SlamTek",
-         "model": "Long Cab",
-         "type": "Cabin",
-         "value": 350,
-         "size": "1",
-         "weight": 300,
-         "passengers": 4,
-         "max_cargo": 100,
-         "drag": 0.9,
-         "frontal_area": 3.3,
-         "cargo": [],
-         "seats": [],
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Pigeon",
-         "model": "Nest",
-         "type": "Cabin",
-         "value": 550,
-         "size": "1",
-         "weight": 150,
-         "passengers": 1,
-         "max_cargo": 100,
-         "drag": 0.4,
-         "frontal_area": 1.3,
-         "cargo": [],
-         "seats": [],
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.3,
-        },
-        {"brand": "Steelworks",
-         "model": "Shortbed Pick-Up Cab",
-         "type": "Cabin",
-         "value": 850,
-         "size": "2",
-         "weight": 750,
-         "passengers": 2,
-         "max_cargo": 400,
-         "drag": 0.8,
-         "frontal_area": 3.2,
-         "cargo": [],
-         "seats": [],
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Steelworks",
-         "model": "Longbed Pick-Up Cab",
-         "type": "Cabin",
-         "value": 950,
-         "size": "2",
-         "weight": 950,
-         "passengers": 2,
-         "max_cargo": 600,
-         "drag": 0.82,
-         "frontal_area": 3.2,
-         "cargo": [],
-         "seats": [],
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Steelworks",
-         "model": "Shortbed Crew Cab",
-         "type": "Cabin",
-         "value": 1050,
-         "size": "2",
-         "weight": 1200,
-         "passengers": 4,
-         "max_cargo": 300,
-         "drag": 0.81,
-         "frontal_area": 3.3,
-         "cargo": [],
-         "seats": [],
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Steelworks",
-         "model": "Longbed Crew Cab",
-         "type": "Cabin",
-         "value": 1250,
-         "size": "4",
-         "weight": 1500,
-         "passengers": 4,
-         "max_cargo": 600,
-         "drag": 0.83,
-         "frontal_area": 3.3,
-         "cargo": [],
-         "seats": [],
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Universal",
-         "model": "Bus Cab",
-         "type": "Cabin",
-         "value": 750,
-         "size": "3",
-         "weight": 800,
-         "passengers": 20,
-         "max_cargo": 1000,
-         "drag": 0.9,
-         "frontal_area": 4.3,
-         "cargo": [],
-         "seats": [],
-         "durability": 200,
-         "max_durability": 200,
-         "wear_rate": 0.5,
-        }
-    ],
-    
-    "fuel_tank": [
-        {"brand": "SlamTek",
-         "model": "Fuel Tank 01",
-         "type": "Fuel Tank",
-         "value": 100,
-         "weight": 5,
-         "size": "1",
-         "capacity": 40,
-         "fuel": 0,
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "SlamTek",
-         "model": "Fuel Tank 02",
-         "type": "Fuel Tank",
-         "value": 250,
-         "weight": 10,
-         "size": "1",
-         "capacity": 45,
-         "fuel": 0,
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Pigeon",
-         "model": "Mini Tank",
-         "type": "Fuel Tank",
-         "value": 100,
-         "weight": 2,
-         "size": "1",
-         "capacity": 20,
-         "fuel": 0,
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Steelworks",
-         "model": "VentureTank",
-         "type": "Fuel Tank",
-         "value": 550,
-         "weight": 50,
-         "size": "2",
-         "capacity": 80,
-         "fuel": 0,
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Steelworks",
-         "model": "ExploreTank",
-         "type": "Fuel Tank",
-         "value": 950,
-         "weight": 85,
-         "size": "2",
-         "capacity": 95,
-         "fuel": 0,
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Universal",
-         "model": "EnduroTank",
-         "type": "Fuel Tank",
-         "value": 850,
-         "weight": 100,
-         "size": "3",
-         "capacity": 500,
-         "fuel": 0,
-         "durability": 200,
-         "max_durability": 200,
-         "wear_rate": 0.5,
-        }
-    ],
-    
-    "seats": [
-        {"brand": "SlamTek",
-         "model": "Seat 01",
-         "type": "Seat",
-         "value": 50,
-         "weight": 5,
-         "size": "1",
-         "capacity": 1,
-         "comfort": 1,
-         "characters": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "SlamTek",
-         "model": "Seat 02",
-         "type": "Seat",
-         "value": 150,
-         "weight": 10,
-         "size": "1",
-         "capacity": 1,
-         "comfort": 2,
-         "characters": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        },
-        {"brand": "Universal",
-         "model": "Basic Bus Seat",
-         "type": "Seat",
-         "value": 50,
-         "weight": 5,
-         "size": "1",
-         "capacity": 1,
-         "comfort": 0,
-         "characters": "",
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-        }
-    ],
-    
-    "wheels": [
-        {"brand": "Universal",
-         "model": "w1-20",
-         "type": "wheel",
-         "value": 50,
-         "weight": 2.5,
-         "size": 1,
-         "durability": 100,
-         "max_durability": 100,
-         "wear_rate": 1.0,
-         "diameter": 20,
-         "width": 6,
-         "camber": 0,
-         "toe": 0,
-         "tire": ""
-        }
-    ],
-    
-    "tires": [
-        {"brand": "Universal",
-         "model": "t1-20",
-         "type": "tire",
-         "value": 50,
-         "weight": 2.5,
-         "size": 1,
-         "durability": 100,
-         "max_durability": 100,
-         # Drag rate decreases mpg
-         "drag_rate": 1.0,
-         "wear_rate": 1.0,
-         "diameter": 20,
-         "width": 6,
-         "max_psi": 20,
-         "psi": 20
-        }
-    ],
+    "chassis": [],
+    "engine": [],
+    "turbo": [],
+    "cabin": [],
+    "fuel_tank": [],
+    "seats": [],
+    "wheels": [],
+    "tires": [],
 }
+
+
+to_import = [
+    [parts["chassis"],"data/carpg_parts_chassis.csv","chassis"],
+    [parts["engine"],"data/carpg_parts_engines.csv","engine"],
+    [parts["turbo"],"data/carpg_parts_turbos.csv","turbo"],
+    [parts["cabin"],"data/carpg_parts_cabins.csv","cabin"],
+    [parts["fuel_tank"],"data/carpg_parts_fuel_tanks.csv","fuel_tank"],
+    [parts["seats"],"data/carpg_parts_seats.csv","seats"],
+    [parts["wheels"],"data/carpg_parts_wheels.csv","wheels"],
+    [parts["tires"],"data/carpg_parts_tires.csv","tires"],
+]
+
+
+def init():
+    import_data()
+
+
+def import_data():
+    print("\nWelcome!!  Let's import some data!\n")
+    for item in to_import:
+        print("\nPreparing to import "+item[2]+" data from "+item[1]+"...")
+        with open(item[1]) as csv_file:
+            count = 0
+            csv_reader = csv.DictReader(csv_file)
+            for row in csv_reader:
+                row_dict = {}
+                row_dict.update(row)
+                item[0].append(row_dict)
+                count += 1
+        print("...imported "+str(count)+" items!")
+    convert_values()
+    print("\nImported all files successfully!\n")
+    print("\nType carpg.play() to begin!\n")
     
+## Finds all items which may need to be converted ##    
+def convert_values():
+    """Find the databases which contain numbers as some values"""
+    print("\nConverting strings to ints...")
+    db_list = [parts["chassis"],parts["engine"],parts["turbo"],parts["cabin"],
+               parts["fuel_tank"],parts["seats"],parts["wheels"],parts["tires"]]
+    for db in db_list:
+        for item in db:
+            item = convert_item(item)
+    print("...converted strings to ints where needed!")
+            
+## Automatically convert strings to ints where applicable with Try/Except block ##
+def convert_item(item):
+    """Check each field of received dictionary"""
+    #print("Item: "+str(item))
+    for i in item:
+        """Try to convert value to int if possible"""
+        try:
+            #print(i+": "+item[i])
+            item[i] = float(item[i])
+        except:
+            pass
+        if item[i] == "[]":
+            item[i] = list(item[i])
+            item[i].clear()
+    """Then return the modified item"""
+    return(item)
+
+
+
 class jobs:
     JOBS = [
         "Driver","Scientist","Mechanic"
@@ -1482,7 +1001,7 @@ def make_part_old(part):
 def travel_tick_rate(player):
     no_fuel = False
     max_speed=calculate_max_speed(player["vehicle"])
-    if player["vehicle"]["chassis"]["fuel_tank"]["fuel"] <= 0:
+    if float(player["vehicle"]["chassis"]["fuel_tank"]["fuel"]) <= 0:
         max_speed=1
         #print("{}No fuel!!!{} Having to push car at minimum speed...\n".format(color.BOLD,color.END))
         
@@ -2082,10 +1601,13 @@ def warehouse(network,player,location_name):
         print(short_border)
         print("You can accept or complete delivery contracts at places like this")
         for item in player["vehicle"]["chassis"]["cabin"]["cargo"]:
-            if item["destination"] == location_name:
-                print("Ah, looks like you have a delivery for us.")
-                complete_delivery(network,player,location_name)
-                player["travel_log"].append("  Delivered {} from {}".format(item["name"],item["origin"]))
+            try:
+                if item["destination"] == location_name:
+                    print("Ah, looks like you have a delivery for us.")
+                    complete_delivery(network,player,location_name)
+                    player["travel_log"].append("  Delivered {} from {}".format(item["name"],item["origin"]))
+            except:
+                pass
         choice = input("Take on a new delivery? (y/n) ")
         if choice != "y":
             return
@@ -2366,12 +1888,12 @@ def calculate_weight(vehicle):
     eng = vehicle["chassis"]["engine"]
     tank = vehicle["chassis"]["fuel_tank"]
     for seat in cab["seats"]:
-        passenger_weight+=seat["weight"]
+        passenger_weight+=int(seat["weight"])
         try:
             passenger_weight+=seat["characters"]["weight"]
         except:
             pass
-    weight = cab["weight"] + chas["weight"] + eng["weight"] + tank["weight"] + tank["fuel"] + passenger_weight
+    weight = int(cab["weight"]) + int(chas["weight"]) + int(eng["weight"]) + int(tank["weight"]) + int(tank["fuel"]) + passenger_weight
     try:
         for item in cab["cargo"]:
             weight += item["weight"]
@@ -2383,7 +1905,7 @@ def calculate_weight(vehicle):
 ## GIVEN A VEHICLE, ATTEMPTS TO CALCULATE TOTAL VEHICLE VALUE BASED ON PART VALUES ##
 def calculate_vehicle_value(vehicle):
     total_value = 0
-    total_value += vehicle["chassis"]["value"]*(vehicle["chassis"]["max_durability"]/100)
+    total_value += float(vehicle["chassis"]["value"])*(vehicle["chassis"]["max_durability"]/100)
     try:
         total_value += vehicle["chassis"]["cabin"]["value"]*(vehicle["chassis"]["cabin"]["max_durability"]/100)
         for seat in vehicle["chassis"]["cabin"]["seats"]:
@@ -2432,8 +1954,8 @@ def summary_car(car):
     #hpt = round(car["chassis"]["engine"]["base_horsepower"]/(weight/1000),2)
     max_speed=calculate_max_speed(car)
     mpg=effective_mpg(car)
-    miles=round(mpg*car["chassis"]["fuel_tank"]["capacity"],2)
-    emiles=round(mpg*car["chassis"]["fuel_tank"]["fuel"],2)
+    miles=round(float(mpg)*float(car["chassis"]["fuel_tank"]["capacity"]),2)
+    emiles=round(float(mpg)*float(car["chassis"]["fuel_tank"]["fuel"]),2)
     
     print("\n{}{}{}: {} occupants, {} kg, {}kmh, {}mpg, {}({})miles, value: ${}".format(
         color.BOLD,car["name"],color.END,len(car["chassis"]["cabin"]["seats"]),round(weight,2),
@@ -2456,14 +1978,14 @@ def display_vehicle(vehicle):
     cab = vehicle["chassis"]["cabin"]
     eng = vehicle["chassis"]["engine"]
     tank = vehicle["chassis"]["fuel_tank"]
-    mpg = eng["base_mpg"]
-    miles = mpg*tank["capacity"]
+    mpg = float(eng["base_mpg"])
+    miles = mpg*float(tank["capacity"])
     weight = calculate_weight(vehicle)
     hp = calculate_horsepower(vehicle)
     hpt = hp/(weight/1000)
     empg = effective_mpg(vehicle)
-    max_range = empg*tank["fuel"]
-    emiles = round(empg*tank["capacity"],2)
+    max_range = empg*float(tank["fuel"])
+    emiles = round(empg*float(tank["capacity"]),2)
     max_speed = calculate_max_speed(vehicle)
     
     
@@ -2481,7 +2003,7 @@ def display_vehicle(vehicle):
         tank["brand"],tank["model"],tank["capacity"],tank["durability"],tank["max_durability"]))
     print("{} km maximum possible on a full tank at {} mpg".format(emiles,empg))
     print("{} km currently possible with {} gallons".format(
-        str(round(max_range,2)),str(round(tank["fuel"],2))))
+        str(round(float(max_range),2)),str(round(float(tank["fuel"]),2))))
     print("\n")
     count=1
     for seat in cab["seats"]:
@@ -2502,11 +2024,17 @@ def display_vehicle(vehicle):
         count+=1
     cargo_weight = 0
     for item in cab["cargo"]:
-        cargo_weight += item["weight"]
+        try:
+            cargo_weight += item["weight"]
+        except:
+            pass
     print(short_border)
-    print("Cargo: {} / {} kg".format(cargo_weight,cab["max_cargo"]))
+    print("Cargo: {} / {} kg".format(cargo_weight,int(cab["max_cargo"])))
     for item in cab["cargo"]:
-        print("  "+item["name"])
+        try:
+            print("  "+item["name"])
+        except:
+            pass
     print(short_border)
 
 
@@ -2516,7 +2044,8 @@ def effective_mpg(car):
     weight_factor = weight/1000
     base_mpg=car["chassis"]["engine"]["base_mpg"]
     torque_factor,drag_factor=calculate_car_factors(car)
-    mpg = round((base_mpg*torque_factor*drag_factor)-(weight_factor/torque_factor),2)
+    mpg = round((float(base_mpg)*float(torque_factor)*float(drag_factor))-
+                (float(weight_factor)/float(torque_factor)),2)
     try:
         mpg = mpg*car["chassis"]["engine"]["turbo"]["mpg_factor"]
     except:
@@ -2553,7 +2082,9 @@ def update_car_engine(car):
 def calculate_base_horsepower(eng):
     #factor = 18000 is the 'realistic' setting
     factor = 12000
-    horsepower = round(((eng["bore"]*eng["bore"])*eng["stroke"]*eng["max_rpm"]/factor)*eng["cylinders"],2)
+    horsepower = round(
+         ((float(eng["bore"])*float(eng["bore"]))*float(eng["stroke"])*
+         int(eng["max_rpm"])/factor)*int(eng["cylinders"]),2)
     return(horsepower)
 
 
@@ -2562,7 +2093,7 @@ def calculate_base_torque(eng):
     #factor = 63025 is the 'realistic' setting
     factor = 42000
     horsepower = calculate_base_horsepower(eng)
-    torque = round(((horsepower / eng["max_rpm"])*factor)/12,2)
+    torque = round(((horsepower / int(eng["max_rpm"]))*factor)/12,2)
     return(torque)
 
 
@@ -2612,7 +2143,7 @@ def print_handling_stats():
 ## CALCULATE AND RETURN TOTAL HORSEPOWER OF VEHICLES ENGINE ##
 def calculate_horsepower(car):
     eng = car["chassis"]["engine"]
-    horsepower = car["chassis"]["engine"]["base_horsepower"] * eng["compression"]
+    horsepower = float(car["chassis"]["engine"]["base_horsepower"]) * float(eng["compression"])
     try:
         print(eng["turbo"]["horsepower_factor"])
         horsepower = horsepower * eng["turbo"]["horsepower_factor"]
@@ -2630,7 +2161,7 @@ def calculate_car_factors(car):
     if torque_factor < 0.01:
         torque_factor = 0.01
     drag=car["chassis"]["cabin"]["drag"]
-    drag_factor=1-(drag/2.5)
+    drag_factor=1-(float(drag)/2.5)
     return(torque_factor,drag_factor)
         
         
@@ -2972,14 +2503,17 @@ def show_roster():
 
 ## GIVEN VEHICLE, DETERMINE SEAT SLOTS AND INSTALL SEATS ACCORDINGLY ##
 def install_seats(vehicle):
-    seatslots = vehicle["chassis"]["cabin"]["passengers"]
+    seatslots = int(vehicle["chassis"]["cabin"]["passengers"])
     seatrosterlen = len(seatroster)
     diff = seatslots-seatrosterlen
     if diff == 0:
         diff = 1
     for i in range(0,diff):
         new_seat()
-    vehicle["chassis"]["cabin"]["seats"].clear()
+    try:
+        vehicle["chassis"]["cabin"]["seats"].clear()
+    except:
+        vehicle["chassis"]["cabin"]["seats"] = []
     for i in range(0,seatslots):
         seat = seatroster[0].copy()
         #print("Appending seat {} to cabin {}".format(
@@ -3146,6 +2680,9 @@ def play():
     print(help_string)
     cont = input("\nHit enter to start! ")
     explore_test(n,p)
-    
+  
+
+init()
+
 ##
 ##
