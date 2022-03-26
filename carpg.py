@@ -124,7 +124,6 @@ def import_data():
         print("...imported "+str(count)+" items!")
     convert_values()
     print("\nImported all files successfully!\n")
-    print("\nType carpg.play() to begin!\n")
     
 ## Finds all items which may need to be converted ##    
 def convert_values():
@@ -2679,6 +2678,11 @@ def play():
   
 
 init()
+
+inp = input("Enter 'y' to start game\n> ")
+if inp == "y" or inp == "Y":
+    play()
+
 
 ##
 ##
