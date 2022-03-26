@@ -1505,7 +1505,10 @@ def junkyard(player):
                             if part == "":
                                 print("Installed {}!".format(part["type"]))
                                 return
-                            value = int(round(part["value"]/4,2))
+                            try:
+                                value = int(round(part["value"]/4,2))
+                            except:
+                                value = 0
                             print("Replaced the {} and sold the old one for {}!  Now at ${}".format(
                                 part["type"],value,player["currency"]))
                             player["currency"] += value
@@ -1513,7 +1516,7 @@ def junkyard(player):
                     player["currency"] += value
                     print("Sold!  Now at ${}".format(player["currency"]))
                 else:
-                    print("{} failed to find anything worthwhile".format(mechanic["name"]))
+                    print("\n{} failed to find anything worthwhile".format(mechanic["name"]))
                 for skill in mechanic["skills"]:
                     skill["xp"] += 10
                     if skill["xp"] >= 100:
@@ -1763,18 +1766,20 @@ def match_vehicle_part(vehicle,part1):
 			
 ## COMPARES TWO SIMILAR PARTS AND HIGHLIGHTS DIFFERENCES ##
 def compare_parts(part1,part2):
-    if part1 == "" or part2 == "":
-        print("One of these parts is blank!")
-        #return
-    elif part1["type"] != part2["type"]:
-        print("These parts are dissimilar.  Cannot compare them!")
-        return
-    for part in [part1,part2]:
-        try:
-            display_part(part)
-        except:
-            pass
-        
+    try:
+        if part1 == "" or part2 == "":
+            print("One of these parts is blank!")
+            #return
+        elif part1["type"] != part2["type"]:
+            print("These parts are dissimilar.  Cannot compare them!")
+            return
+        for part in [part1,part2]:
+            try:
+                display_part(part)
+            except:
+                pass
+    except:
+        print("One of these parts is blank!  Cannot compare them!")
         
 ## PRINTS A VERBOSE DESCRIPTION OF GIVEN PART ##
 def display_part(part):
