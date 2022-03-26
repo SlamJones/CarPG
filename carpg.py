@@ -93,6 +93,11 @@ parts = {
 }
 
 
+settings = {
+    "starting_funds": 100,
+}
+
+
 to_import = [
     [parts["chassis"],"data/carpg_parts_chassis.csv","chassis"],
     [parts["engine"],"data/carpg_parts_engines.csv","engine"],
@@ -1874,7 +1879,7 @@ def new_player():
         "name": "Team "+random.choice(party_names),
         "vehicle": vehicle,
         "party": party,
-        "currency": 100,
+        "currency": settings["starting_funds"],
         "reputation": 0,
         "travel_log": [],
     }
