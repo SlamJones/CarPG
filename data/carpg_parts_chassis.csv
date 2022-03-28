@@ -1,0 +1,7 @@
+brand,model,type,value,size,weight,engine,cabin,fuel_tank,durability,max_durability,wear_rate,weight_wear_factor,wheelbase,track,wheels
+SlamTek,SlamChas,Chassis,100,1,1000,[],[],[],100,100,1.0,1.0,3.0,1.5,4
+SlamTek,SlamChas2,Chassis,80,1,1200,[],[],[],100,100,1.0,1.0,3.2,1.5,4
+Pigeon,Carrier,Chassis,200,1,500,[],[],[],100,100,1.3,1.5,1.5,1.2,3
+Flexx,Racer,Chassis,500,1,800,[],[],[],100,100,1.3,1.2,1.8,1.4,4
+Steelworks,2-ton Chassis,Chassis,250,2,2000,[],[],[],100,100,1.0,1.0,4.0,1.7,4
+Universal,Bus Chassis 01,Chassis,250,3,2500,[],[],[],100,100,0.5,0.5,8.0,1.9,8

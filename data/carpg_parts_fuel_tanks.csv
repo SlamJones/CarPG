@@ -1,0 +1,7 @@
+brand,model,type,value,weight,size,capacity,fuel,durability,max_durability,wear_rate
+SlamTek,Fuel Tank 01,Fuel Tank,100,5,"1",40,0,100,100,1.0
+SlamTek,Fuel Tank 02,Fuel Tank,250,10,"1",45,0,100,100,1.0
+Pigeon,Mini Tank,Fuel Tank,250,10,"1",45,0,100,100,1.0
+Steelworks,VentureTank,Fuel Tank,550,50,"2",80,0,100,100,1.0
+Steelworks,ExploreTank,Fuel Tank,950,85,"2",95,0,100,100,1.0
+Universal,EnduroTank,Fuel Tank,850,100,"3",500,0,200,200,0.5
