@@ -2395,6 +2395,7 @@ def salvage_random_part():
     part = random.choice(parts[category])
     part = make_part_old(part)
     part["durability"] = random.randrange(5,part["max_durability"])
+    part["max_durability"] = part["durability"]
     return(part)
 
 
