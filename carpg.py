@@ -1514,8 +1514,11 @@ def junkyard(player):
                                 value = int(round(part["value"]/4,2))
                             except:
                                 value = 0
-                            print("Replaced the {} and sold the old one for {}!  Now at ${}".format(
+                            try:
+                                print("Replaced the {} and sold the old one for ${}!  Now at ${}".format(
                                 part["type"],value,player["currency"]))
+                            except:
+                                pass
                             player["currency"] += value
                             return
                     player["currency"] += value
@@ -2150,7 +2153,7 @@ def calculate_horsepower(car):
     eng = car["chassis"]["engine"]
     horsepower = float(car["chassis"]["engine"]["base_horsepower"]) * float(eng["compression"])
     try:
-        print(eng["turbo"]["horsepower_factor"])
+        #print(eng["turbo"]["horsepower_factor"])
         horsepower = horsepower * eng["turbo"]["horsepower_factor"]
     except:
         pass
@@ -2196,6 +2199,8 @@ def replace_part(vehicle,new_part):
         fuel = 0
     if new_part["type"] == "Chassis":
         cont=input("Keep cabin, engine, and fuel tank? (y/n) ")
+        """Forcing yes for now"""
+        cont = "y"
         if cont == "y":
             cab=vehicle["chassis"]["cabin"].copy()
             eng=vehicle["chassis"]["engine"].copy()
